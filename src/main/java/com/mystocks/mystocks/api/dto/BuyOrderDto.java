@@ -1,13 +1,13 @@
-package com.mystocks.mystocks.dto;
+package com.mystocks.mystocks.api.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BalanceDto {
-    String amount;
+public class BuyOrderDto {
+    String equity;
+    int quantity;
 }

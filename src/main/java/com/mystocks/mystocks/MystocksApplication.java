@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 import com.mystocks.mystocks.domain.Account;
 
 @SpringBootApplication
@@ -16,5 +17,10 @@ public class MystocksApplication {
     @Bean
     public Account createDefaultAccount() {
         return Account.open(BigDecimal.ZERO);
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

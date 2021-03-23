@@ -1,4 +1,4 @@
-package com.mystocks.mystocks.controller;
+package com.mystocks.mystocks.api.controller;
 
 import java.math.BigDecimal;
 import org.springframework.http.MediaType;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.mystocks.mystocks.domain.AccountService;
-import com.mystocks.mystocks.dto.AccountDto;
-import com.mystocks.mystocks.dto.BalanceDto;
+import com.mystocks.mystocks.api.dto.AccountDto;
+import com.mystocks.mystocks.api.dto.BalanceDto;
 
 @RestController
 @RequestMapping(value = "/api/account")

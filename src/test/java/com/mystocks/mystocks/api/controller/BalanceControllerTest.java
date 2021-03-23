@@ -1,6 +1,5 @@
-package com.mystocks.mystocks.controller;
+package com.mystocks.mystocks.api.controller;
 
-import java.math.BigDecimal;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -14,8 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mystocks.mystocks.domain.AccountService;
 import com.mystocks.mystocks.domain.Randomiser;
-import com.mystocks.mystocks.dto.AccountDto;
-import com.mystocks.mystocks.dto.BalanceDto;
+import com.mystocks.mystocks.api.dto.AccountDto;
+import com.mystocks.mystocks.api.dto.BalanceDto;
 
 class BalanceControllerTest {
 
