@@ -4,9 +4,12 @@ import java.math.BigDecimal;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.mystocks.mystocks.domain.AccountService;
+import com.mystocks.mystocks.dto.AccountDto;
 import com.mystocks.mystocks.dto.BalanceDto;
 
 @RestController
@@ -20,8 +23,20 @@ public class BalanceController {
     }
 
     @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BalanceDto> getBalance() {
+    public ResponseEntity<BalanceDto> balance() {
         var balance = accountService.getBalance();
-        return ResponseEntity.ok(BalanceDto.builder().amount(balance.toString()).build());
+        return ResponseEntity.ok(new BalanceDto(balance.toString()));
+    }
+
+    @PostMapping(value = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BalanceDto> deposit(@RequestBody AccountDto body) {
+        var newBalance = accountService.deposit(new BigDecimal(body.getAmount()));
+        return ResponseEntity.ok(new BalanceDto(newBalance.toString()));
+    }
+
+    @PostMapping(value = "/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BalanceDto> withdraw(@RequestBody AccountDto body) {
+        var newBalance = accountService.withdraw(new BigDecimal(body.getAmount()));
+        return ResponseEntity.ok(new BalanceDto(newBalance.toString()));
     }
 }

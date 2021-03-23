@@ -5,11 +5,25 @@ import java.math.BigDecimal;
 public class Account {
     private BigDecimal balance;
 
-    public Account() {
-        this.balance = BigDecimal.ZERO;
+    private Account(BigDecimal initialBalance) {
+        this.balance = initialBalance;
+    }
+
+    public static Account open(BigDecimal initialbalance) {
+        return new Account(initialbalance);
     }
 
     public BigDecimal getBalance() {
         return balance;
+    }
+
+    public Account deposit(BigDecimal amount) {
+        balance = balance.add(amount);
+        return this;
+    }
+
+    public Account withdraw(BigDecimal amount) {
+        balance = balance.subtract(amount);
+        return this;
     }
 }

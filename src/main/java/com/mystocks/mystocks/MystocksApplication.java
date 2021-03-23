@@ -1,13 +1,20 @@
 package com.mystocks.mystocks;
 
+import java.math.BigDecimal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import com.mystocks.mystocks.domain.Account;
 
 @SpringBootApplication
 public class MystocksApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MystocksApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MystocksApplication.class, args);
+    }
 
+    @Bean
+    public Account createDefaultAccount() {
+        return Account.open(BigDecimal.ZERO);
+    }
 }

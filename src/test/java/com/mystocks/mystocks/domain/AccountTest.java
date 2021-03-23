@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 class AccountTest {
-    private final Account account = new Account();
+    private final Account account = Account.open(BigDecimal.ZERO);
 
     @Test
     void shouldHaveBalanceOfZeroForNewAccount() {

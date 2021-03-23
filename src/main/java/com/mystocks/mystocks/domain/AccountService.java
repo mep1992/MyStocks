@@ -8,11 +8,19 @@ public class AccountService {
 
     private final Account account;
 
-    public AccountService() {
-        this.account = new Account();
+    public AccountService(Account account) {
+        this.account = account;
     }
 
     public BigDecimal getBalance() {
-        return this.account.getBalance();
+        return account.getBalance();
+    }
+
+    public BigDecimal deposit(BigDecimal amount) {
+        return account.deposit(amount).getBalance();
+    }
+
+    public BigDecimal withdraw(BigDecimal amount) {
+        return account.withdraw(amount).getBalance();
     }
 }
