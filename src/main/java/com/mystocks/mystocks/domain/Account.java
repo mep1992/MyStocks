@@ -9,8 +9,8 @@ public class Account {
         this.balance = initialBalance;
     }
 
-    public static Account open(BigDecimal initialbalance) {
-        return new Account(initialbalance);
+    public static Account open(BigDecimal initialBalance) {
+        return new Account(initialBalance);
     }
 
     public BigDecimal getBalance() {
