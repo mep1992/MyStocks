@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BuyOrderDto {
+public class OrderDto {
     String equity;
     int quantity;
 }

@@ -1,18 +1,21 @@
 package com.mystocks.mystocks.api.controller;
 
+import java.math.BigDecimal;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mystocks.mystocks.api.dto.BuyOrderDto;
+import com.mystocks.mystocks.api.dto.OrderDto;
 import com.mystocks.mystocks.domain.AccountService;
+import com.mystocks.mystocks.domain.AccountSummary;
 import com.mystocks.mystocks.domain.Randomiser;
 
 class StockOrderControllerTest {
@@ -22,19 +25,36 @@ class StockOrderControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Randomiser randomiser = new Randomiser();
 
+    private final String equity = randomiser.stock();
+    private final int stockQuantity = randomiser.stockQuantity();
+    private final OrderDto requestDto = OrderDto.builder()
+        .equity(equity)
+        .quantity(stockQuantity)
+        .build();
+    private final AccountSummary accountSummary = new AccountSummary(randomiser.amount(), Map.of(equity, stockQuantity));
+
     @Test
     void shouldBuyStock() throws Exception {
-        var equity = randomiser.equity();
-        var stockQuantity = randomiser.stockQuantity();
-        var requestDto = BuyOrderDto.builder()
-            .equity(equity)
-            .quantity(stockQuantity)
-            .build();
+        when(accountService.buy(equity, stockQuantity)).thenReturn(accountSummary);
+
         mockMvc
             .perform(post("/api/order/buy")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(APPLICATION_JSON_VALUE))
-            .andExpect(status().isOk());
-        verify(accountService).buy(equity, stockQuantity);
+            .andExpect(status().isOk())
+        .andExpect(content().string(objectMapper.writeValueAsString(accountSummary)));
+
+    }
+
+    @Test
+    void shouldSellStock() throws Exception {
+        when(accountService.sell(equity, stockQuantity)).thenReturn(accountSummary);
+
+        mockMvc
+            .perform(post("/api/order/sell")
+                .content(objectMapper.writeValueAsString(requestDto))
+                .contentType(APPLICATION_JSON_VALUE))
+            .andExpect(status().isOk())
+            .andExpect(content().string(objectMapper.writeValueAsString(accountSummary)));
     }
 }

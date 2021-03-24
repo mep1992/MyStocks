@@ -26,9 +26,15 @@ public class AccountService {
         return account.withdraw(amount).getBalance();
     }
 
-    public AccountSummary buy(String equity, int stockQuantity) {
+    public AccountSummary buy(String stock, int stockQuantity) {
         return account
-            .buy(equity, stockQuantity, pricingService.getLastOpenPrice(equity))
+            .buy(stock, stockQuantity, pricingService.getLastOpenPrice(stock))
+            .getSummary();
+    }
+
+    public AccountSummary sell(String stock, int stockQuantity) {
+        return account
+            .sell(stock, stockQuantity, pricingService.getLastOpenPrice(stock))
             .getSummary();
     }
 }

@@ -16,7 +16,7 @@ public class MystocksApplication {
 
     @Bean
     public Account createDefaultAccount() {
-        return Account.open(BigDecimal.ZERO);
+        return Account.open();
     }
 
     @Bean

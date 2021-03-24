@@ -23,7 +23,7 @@ public class Randomiser {
         return amount();
     }
 
-    public String equity() {
+    public String stock() {
         var equities = new String[] { "TEAM", "GOOG", "IBM" };
         return equities[random.nextInt(equities.length)];
     }
