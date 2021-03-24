@@ -1,5 +1,7 @@
 package com.mystocks.mystocks.domain;
 
+import java.math.BigDecimal;
+
 public interface PricingService {
-    EquityPrice getLastOpenPrice(String equity);
+    BigDecimal getLastOpenPrice(String equity);
 }

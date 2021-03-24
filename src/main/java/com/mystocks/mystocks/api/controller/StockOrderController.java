@@ -1,6 +1,7 @@
 package com.mystocks.mystocks.api.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ public class StockOrderController {
     }
 
     @PostMapping(value = "/buy", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void buy(@RequestBody BuyOrderDto body) {
+    public ResponseEntity<Void> buy(@RequestBody BuyOrderDto body) {
+        accountService.buy(body.getEquity(), body.getQuantity());
+        return ResponseEntity.ok().build();
     }
 }
