@@ -27,7 +27,7 @@ class StockOrderControllerTest {
     private final String equity = randomiser.stock();
     private final int stockQuantity = randomiser.stockQuantity();
     private final OrderDto requestDto = OrderDto.builder()
-        .equity(equity)
+        .stock(equity)
         .quantity(stockQuantity)
         .build();
     private final AccountSummary accountSummary = new AccountSummary(randomiser.amount(), Map.of(equity, stockQuantity));
