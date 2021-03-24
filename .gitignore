@@ -8,6 +8,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/webapp/node_modules
+src/main/resources/webapp/dist
 
 ### STS ###
 .apt_generated
