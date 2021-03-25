@@ -25,17 +25,17 @@ class StockControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Randomiser randomiser = new Randomiser();
 
-    private final String equity = randomiser.stock();
+    private final String stock = randomiser.stock();
     private final int stockQuantity = randomiser.stockQuantity();
     private final OrderDto requestDto = OrderDto.builder()
-        .stock(equity)
+        .stock(stock)
         .quantity(stockQuantity)
         .build();
-    private final PortfolioSummary portfolioSummary = new PortfolioSummary(randomiser.amount(), Map.of(equity, stockQuantity));
+    private final PortfolioSummary portfolioSummary = new PortfolioSummary(randomiser.amount(), Map.of(stock, stockQuantity));
 
     @Test
     void shouldBuyStock() throws Exception {
-        when(portfolioService.buyStock(equity, stockQuantity)).thenReturn(portfolioSummary);
+        when(portfolioService.buyStock(stock, stockQuantity)).thenReturn(portfolioSummary);
 
         var expectedDto = PortfolioSummaryDto.from(portfolioSummary);
         mockMvc
@@ -49,7 +49,7 @@ class StockControllerTest {
 
     @Test
     void shouldSellStock() throws Exception {
-        when(portfolioService.sellStock(equity, stockQuantity)).thenReturn(portfolioSummary);
+        when(portfolioService.sellStock(stock, stockQuantity)).thenReturn(portfolioSummary);
 
         var expectedDto = PortfolioSummaryDto.from(portfolioSummary);
         mockMvc

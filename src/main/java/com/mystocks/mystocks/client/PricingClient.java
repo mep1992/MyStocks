@@ -26,13 +26,13 @@ public class PricingClient implements PricingService {
         this.apiKey = apiKey;
     }
 
-    public BigDecimal getLastOpenPrice(String equity) {
+    public BigDecimal getLastOpenPrice(String stock) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(endpoint)
             .queryParam("function", "TIME_SERIES_INTRADAY")
-            .queryParam("symbol", equity)
+            .queryParam("symbol", stock)
             .queryParam("interval", "5min")
             .queryParam("apikey", apiKey);
 
