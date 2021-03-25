@@ -10,26 +10,26 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-class AccountTest {
+class PortfolioTest {
 
     private final Randomiser randomiser = new Randomiser();
     @Test
     void shouldGetBalance() {
         var initialBalance = randomiser.amount();
-        var account = Account.open(initialBalance);
-        assertThat(account.getBalance(), is(initialBalance));
+        var portfolio = Portfolio.open(initialBalance);
+        assertThat(portfolio.getBalance(), is(initialBalance));
     }
 
     @Test
     void shouldAddStockToStockListWhenBuyingAndUpdateBalance() {
         var initialBalance = randomiser.amount(100, 200);
-        var account = Account.open(initialBalance);
+        var portfolio = Portfolio.open(initialBalance);
         var quantity = 3;
         var stockPrice = BigDecimal.valueOf(2.76);
         var stock = randomiser.stock();
 
-        account.buy(stock, quantity, stockPrice);
-        var summary = account.getSummary();
+        portfolio.buy(stock, quantity, stockPrice);
+        var summary = portfolio.getSummary();
 
         var expectedNewBalance = initialBalance.subtract(stockPrice.multiply(BigDecimal.valueOf(quantity)));
         assertThat(summary.getBalance(), is(expectedNewBalance));
@@ -39,14 +39,14 @@ class AccountTest {
 
     @Test
     void shouldUpdateStockQuantityForAlreadyPurchasedStockWhenBuying() {
-        var account = Account.open(randomiser.amount());
+        var portfolio = Portfolio.open(randomiser.amount());
         var stockPrice = BigDecimal.valueOf(2.76);
         var stock = randomiser.stock();
 
-        account.buy(stock, 3, stockPrice);
-        account.buy(stock, 7, stockPrice);
+        portfolio.buy(stock, 3, stockPrice);
+        portfolio.buy(stock, 7, stockPrice);
 
-        var summary = account.getSummary();
+        var summary = portfolio.getSummary();
         assertThat(summary.getStockList().entrySet(), hasSize(1));
         assertThat(summary.getStockList(), hasEntry(stock, 10));
     }
@@ -57,10 +57,10 @@ class AccountTest {
         var quantity = 3;
         var stockPrice = BigDecimal.valueOf(2.76);
         var stock = randomiser.stock();
-        var account = Account.open(initialBalance, createMutableMap(Map.of(stock, quantity)));
+        var portfolio = Portfolio.open(initialBalance, createMutableMap(Map.of(stock, quantity)));
 
-        account.sell(stock, quantity, stockPrice);
-        var summary = account.getSummary();
+        portfolio.sell(stock, quantity, stockPrice);
+        var summary = portfolio.getSummary();
 
         var expectedNewBalance = initialBalance.add(stockPrice.multiply(BigDecimal.valueOf(quantity)));
         assertThat(summary.getBalance(), is(expectedNewBalance));
@@ -71,11 +71,11 @@ class AccountTest {
     void shouldUpdateStockQuantityForAlreadyPurchasedStockWhenSelling() {
         var stockPrice = BigDecimal.valueOf(2.76);
         var stock = randomiser.stock();
-        var account = Account.open(randomiser.amount(), createMutableMap(Map.of(stock, 10)));
+        var portfolio = Portfolio.open(randomiser.amount(), createMutableMap(Map.of(stock, 10)));
 
-        account.sell(stock, 7, stockPrice);
+        portfolio.sell(stock, 7, stockPrice);
 
-        var summary = account.getSummary();
+        var summary = portfolio.getSummary();
         assertThat(summary.getStockList().entrySet(), hasSize(1));
         assertThat(summary.getStockList(), hasEntry(stock, 3));
     }
@@ -85,11 +85,11 @@ class AccountTest {
         var stockPrice = BigDecimal.valueOf(2.76);
         var stock = randomiser.stock();
         var quantity = randomiser.stockQuantity();
-        var account = Account.open(randomiser.amount(), createMutableMap(Map.of(stock, quantity)));
+        var portfolio = Portfolio.open(randomiser.amount(), createMutableMap(Map.of(stock, quantity)));
 
-        account.sell(stock, quantity, stockPrice);
+        portfolio.sell(stock, quantity, stockPrice);
 
-        var summary = account.getSummary();
+        var summary = portfolio.getSummary();
         assertThat(summary.getStockList().entrySet(), empty());
     }
 

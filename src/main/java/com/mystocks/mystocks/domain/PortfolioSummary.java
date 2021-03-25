@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class AccountSummary {
+public class PortfolioSummary {
     private final BigDecimal balance;
     private final Map<String, Integer> stockList;
 }

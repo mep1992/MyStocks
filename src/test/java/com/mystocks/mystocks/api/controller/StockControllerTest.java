@@ -10,17 +10,18 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mystocks.mystocks.api.dto.AccountSummaryDto;
+import com.mystocks.mystocks.api.dto.PortfolioSummaryDto;
 import com.mystocks.mystocks.api.dto.OrderDto;
-import com.mystocks.mystocks.domain.AccountService;
-import com.mystocks.mystocks.domain.AccountSummary;
+import com.mystocks.mystocks.domain.PortfolioService;
+import com.mystocks.mystocks.domain.PortfolioSummary;
 import com.mystocks.mystocks.domain.Randomiser;
 
-class StockOrderControllerTest {
-    private final AccountService accountService = mock(AccountService.class);
-    private final StockOrderController stockOrderController = new StockOrderController(accountService);
-    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(stockOrderController).build();
+class StockControllerTest {
+    private final PortfolioService portfolioService = mock(PortfolioService.class);
+    private final StockController stockController = new StockController(portfolioService);
+    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(stockController).build();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Randomiser randomiser = new Randomiser();
 
@@ -30,15 +31,15 @@ class StockOrderControllerTest {
         .stock(equity)
         .quantity(stockQuantity)
         .build();
-    private final AccountSummary accountSummary = new AccountSummary(randomiser.amount(), Map.of(equity, stockQuantity));
+    private final PortfolioSummary portfolioSummary = new PortfolioSummary(randomiser.amount(), Map.of(equity, stockQuantity));
 
     @Test
     void shouldBuyStock() throws Exception {
-        when(accountService.buy(equity, stockQuantity)).thenReturn(accountSummary);
+        when(portfolioService.buyStock(equity, stockQuantity)).thenReturn(portfolioSummary);
 
-        var expectedDto = AccountSummaryDto.from(accountSummary);
+        var expectedDto = PortfolioSummaryDto.from(portfolioSummary);
         mockMvc
-            .perform(post("/api/order/buy")
+            .perform(post("/api/stock/buy")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
@@ -48,14 +49,25 @@ class StockOrderControllerTest {
 
     @Test
     void shouldSellStock() throws Exception {
-        when(accountService.sell(equity, stockQuantity)).thenReturn(accountSummary);
+        when(portfolioService.sellStock(equity, stockQuantity)).thenReturn(portfolioSummary);
 
-        var expectedDto = AccountSummaryDto.from(accountSummary);
+        var expectedDto = PortfolioSummaryDto.from(portfolioSummary);
         mockMvc
-            .perform(post("/api/order/sell")
+            .perform(post("/api/stock/sell")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
             .andExpect(content().string(objectMapper.writeValueAsString(expectedDto)));
+    }
+
+    @Test
+    void shouldGetStockList() throws Exception {
+        var stockList = Map.of("GOOG", randomiser.stockQuantity(), "IBM", randomiser.stockQuantity());
+        when(portfolioService.getStockList()).thenReturn(stockList);
+
+        mockMvc
+            .perform(get("/api/stock/list"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(objectMapper.writeValueAsString(stockList)));
     }
 }

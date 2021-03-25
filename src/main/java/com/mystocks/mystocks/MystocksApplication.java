@@ -1,11 +1,10 @@
 package com.mystocks.mystocks;
 
-import java.math.BigDecimal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
-import com.mystocks.mystocks.domain.Account;
+import com.mystocks.mystocks.domain.Portfolio;
 
 @SpringBootApplication
 public class MystocksApplication {
@@ -15,8 +14,8 @@ public class MystocksApplication {
     }
 
     @Bean
-    public Account createDefaultAccount() {
-        return Account.open();
+    public Portfolio createDefaultPortfolio() {
+        return Portfolio.open();
     }
 
     @Bean

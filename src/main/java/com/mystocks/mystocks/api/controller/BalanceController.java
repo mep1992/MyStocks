@@ -8,35 +8,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.mystocks.mystocks.domain.AccountService;
-import com.mystocks.mystocks.api.dto.AccountDto;
+import com.mystocks.mystocks.domain.PortfolioService;
 import com.mystocks.mystocks.api.dto.BalanceDto;
 
 @RestController
-@RequestMapping(value = "/api/account")
+@RequestMapping(value = "/api")
 public class BalanceController {
 
-    private final AccountService accountService;
+    private final PortfolioService portfolioService;
 
-    public BalanceController(AccountService accountService) {
-        this.accountService = accountService;
+    public BalanceController(PortfolioService portfolioService) {
+        this.portfolioService = portfolioService;
     }
 
     @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<BalanceDto> balance() {
-        var balance = accountService.getBalance();
+        var balance = portfolioService.getBalance();
         return ResponseEntity.ok(new BalanceDto(balance.toString()));
     }
 
-    @PostMapping(value = "/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BalanceDto> deposit(@RequestBody AccountDto body) {
-        var newBalance = accountService.deposit(new BigDecimal(body.getAmount()));
+    @PostMapping(value = "/balance/deposit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BalanceDto> deposit(@RequestBody BalanceDto body) {
+        var newBalance = portfolioService.deposit(new BigDecimal(body.getAmount()));
         return ResponseEntity.ok(new BalanceDto(newBalance.toString()));
     }
 
-    @PostMapping(value = "/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BalanceDto> withdraw(@RequestBody AccountDto body) {
-        var newBalance = accountService.withdraw(new BigDecimal(body.getAmount()));
+    @PostMapping(value = "/balance/withdraw", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BalanceDto> withdraw(@RequestBody BalanceDto body) {
+        var newBalance = portfolioService.withdraw(new BigDecimal(body.getAmount()));
         return ResponseEntity.ok(new BalanceDto(newBalance.toString()));
     }
 }

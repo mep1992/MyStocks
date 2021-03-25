@@ -11,15 +11,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mystocks.mystocks.domain.AccountService;
+import com.mystocks.mystocks.domain.PortfolioService;
 import com.mystocks.mystocks.domain.Randomiser;
-import com.mystocks.mystocks.api.dto.AccountDto;
 import com.mystocks.mystocks.api.dto.BalanceDto;
 
 class BalanceControllerTest {
 
-    private final AccountService accountService = mock(AccountService.class);
-    private final BalanceController balanceController = new BalanceController(accountService);
+    private final PortfolioService portfolioService = mock(PortfolioService.class);
+    private final BalanceController balanceController = new BalanceController(portfolioService);
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(balanceController).build();
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final Randomiser randomiser = new Randomiser();
@@ -27,11 +26,11 @@ class BalanceControllerTest {
     @Test
     void shouldReturnBalance() throws Exception {
         var balance = randomiser.amount();
-        when(accountService.getBalance()).thenReturn(balance);
+        when(portfolioService.getBalance()).thenReturn(balance);
 
         var expectedDto = new BalanceDto(String.valueOf(balance));
         mockMvc
-            .perform(get("/api/account/balance"))
+            .perform(get("/api/balance/"))
             .andExpect(status().isOk())
             .andExpect(content().string(objectMapper.writeValueAsString(expectedDto)));
     }
@@ -41,13 +40,13 @@ class BalanceControllerTest {
         var newBalance = randomiser.amount();
         var depositAmount = randomiser.amount();
 
-        when(accountService.deposit(depositAmount)).thenReturn(newBalance);
+        when(portfolioService.deposit(depositAmount)).thenReturn(newBalance);
 
-        var requestDto = new AccountDto(String.valueOf(depositAmount));
+        var requestDto = new BalanceDto(String.valueOf(depositAmount));
         var expectedDto = new BalanceDto(String.valueOf(newBalance));
 
         mockMvc
-            .perform(post("/api/account/deposit")
+            .perform(post("/api/balance/deposit")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
@@ -59,13 +58,13 @@ class BalanceControllerTest {
         var newBalance = randomiser.amount();
         var withdrawalAmount = randomiser.amount();
 
-        when(accountService.withdraw(withdrawalAmount)).thenReturn(newBalance);
+        when(portfolioService.withdraw(withdrawalAmount)).thenReturn(newBalance);
 
-        var requestDto = new AccountDto(String.valueOf(withdrawalAmount));
+        var requestDto = new BalanceDto(String.valueOf(withdrawalAmount));
         var expectedDto = new BalanceDto(String.valueOf(newBalance));
 
         mockMvc
-            .perform(post("/api/account/withdraw")
+            .perform(post("/api/balance/withdraw")
                 .content(objectMapper.writeValueAsString(requestDto))
                 .contentType(APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
