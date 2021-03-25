@@ -20,7 +20,7 @@ public class PricingClient implements PricingService {
 
     public PricingClient(RestTemplate restTemplate,
                          @Value("${client.endpoint}") String endpoint,
-                         @Value("${client.apikey") String apiKey) {
+                         @Value("${client.apikey}") String apiKey) {
         this.restTemplate = restTemplate;
         this.endpoint = endpoint;
         this.apiKey = apiKey;
